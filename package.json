@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "gulp": "~3.8.6",
+    "gulp-concat": "^2.4.1",
+    "gulp-filter": "~1.0.0",
+    "gulp-if": "^1.2.4",
+    "gulp-purescript": "0.0.10"
+  }
+}

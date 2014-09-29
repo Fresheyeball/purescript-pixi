@@ -1,0 +1,12 @@
+.psci
+.psci_modules/
+bower_components/
+node_modules/
+output/
+tmp/
+example/js/
+*.sublime-workspace
+*.sublime-project
+extern.purs
+*.atom*
+*.psci

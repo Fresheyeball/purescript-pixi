@@ -1,0 +1,24 @@
+{
+  "name": "purescript-pixi",
+  "private": false,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "example",
+    "tmp"
+  ],
+  "dependencies": {
+    "pixi": "~1.6.1",
+    "purescript-oo-ffi": "~0.0.1"
+  },
+  "devDependencies": {
+    "purescript-quickcheck": "~0.1.3",
+    "mocha": "*",
+    "chai": "~1.9.1",
+    "purescript-mocha": "*",
+    "purescript-chai": "*",
+    "purescript-debug-foreign": "*"
+  }
+}
