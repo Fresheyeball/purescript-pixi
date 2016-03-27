@@ -1,10 +1,11 @@
 module Pixi.DisplayObject.Container.Sprite.Text where
 
-import Pixi.Internal
-import Pixi.DisplayObject
-import Pixi.DisplayObject.Container
-import Data.Foreign.OOFFI
-import Control.Monad.Eff
+import Prelude
+import Pixi.Internal (newPixi2, (<:>))
+import Pixi.DisplayObject (class DisplayObject)
+import Pixi.DisplayObject.Container (class DisplayObjectContainer)
+import Data.Foreign.OOFFI (method1Eff)
+import Control.Monad.Eff (Eff)
 
 foreign import data Text         :: *
 foreign import data TextValueMut :: !
@@ -17,7 +18,7 @@ instance displayObjectContainerText       :: DisplayObjectContainer Text
 
 data Alignment = Left | Center | Right
 
-type TextStyle = { font            :: String 
+type TextStyle = { font            :: String
                  , fill            :: String
                  , align           :: Alignment
                  , stroke          :: String
@@ -25,14 +26,17 @@ type TextStyle = { font            :: String
                  , wordWrap        :: Boolean
                  , wordWrapWidth   :: Number }
 
+textStyleDefault :: TextStyle
 textStyleDefault = { font            : "normal 20px Arial"
                    , fill            : "black"
                    , align           : Left
                    , stroke          : ""
-                   , strokeThickness : 0
+                   , strokeThickness : 0.0
                    , wordWrap        : false
-                   , wordWrapWidth   : 0 }
+                   , wordWrapWidth   : 0.0
+                   }
 
+textStyleToPixi :: forall a. { align :: Alignment | a } -> { align :: String | a }
 textStyleToPixi ts@{ align = Left   } = ts{ align = "left"   }
 textStyleToPixi ts@{ align = Right  } = ts{ align = "right"  }
 textStyleToPixi ts@{ align = Center } = ts{ align = "center" }
@@ -42,9 +46,9 @@ setText s t = method1Eff "setText" t s <:> t
 
 setStyle :: forall e. TextStyle -> Text -> Eff (textStyle :: TextStyleMut | e) Text
 setStyle ts t = method1Eff "setStyle" t ts' <:> t
-  where ts' = textStyleToPixi ts 
+  where ts' = textStyleToPixi ts
 
-newText :: forall e. String -> TextStyle -> Eff (textValue :: TextValueMut, 
+newText :: forall e. String -> TextStyle -> Eff (textValue :: TextValueMut,
                                                  textStyle :: TextStyleMut | e) Text
 newText s ts = newPixi2 "Text" s $ textStyleToPixi ts
 

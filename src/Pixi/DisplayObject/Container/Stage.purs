@@ -22,6 +22,6 @@ getMousePosition = method0Eff "getMousePosition"
 setBackgroundColor :: forall e. ColorHex -> Stage -> Eff (stageMutation :: Color | e) Stage
 setBackgroundColor h s = method1Eff "setBackgroundColor" h s <:> s
 
--- setInteractionDelegate 
+-- setInteractionDelegate
 
 
