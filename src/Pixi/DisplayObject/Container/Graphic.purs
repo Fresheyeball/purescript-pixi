@@ -6,7 +6,7 @@ import Pixi.Internal
 import Pixi.DisplayObject
 import Pixi.DisplayObject.Container
 import Data.Foreign.OOFFI
-import Control.Monad.Eff 
+import Control.Monad.Eff
 
 foreign import data Graphic    :: *
 foreign import data GraphicRef :: !
@@ -21,12 +21,12 @@ beginFill :: forall e. ColorHex -> Alpha -> Graphic -> Eff (render :: Render | e
 beginFill c a g = method2Eff "beginFill" g c a <:> g
 
 -- clear :: forall e. Graphic -> Eff (render :: Render | e) Graphic
--- clear g = method0Eff "clear" g <:> g 
+-- clear g = method0Eff "clear" g <:> g
 
 drawCircle :: forall e. Circle -> Graphic -> Eff (render :: Render | e) Graphic
 drawCircle {radius = r, x = x, y = y} g = method3Eff "drawCircle" g x y r <:> g
 
--- drawEllipse 
+-- drawEllipse
 
 drawRect :: forall e. Rectangle -> Graphic -> Eff (render :: Render | e) Graphic
 drawRect {x = x, y = y, width = w, height = h} g = method4Eff "drawRect" g x y w h <:> g

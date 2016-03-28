@@ -1,27 +1,20 @@
 module Pixi.Detector where
 
-import Pixi.DisplayObject.Container.Stage
-import Pixi.Internal
-import Control.Monad.Eff
-import Data.Function
-import Data.Foreign.OOFFI
+import Prelude
+import Pixi.DisplayObject.Container.Stage (Stage)
+import Pixi.Internal (DOMMutation, DOM, (<:>), Render)
+import Control.Monad.Eff (Eff)
+import Data.Function (Fn2, runFn2)
+import Data.Foreign.OOFFI (method1Eff)
 
 type Renderer = { view   :: DOM }
 
 render :: forall e. Stage -> Renderer -> Eff (render :: Render | e) Renderer
-render s r = method1Eff "render" r s <:> r 
+render s r = method1Eff "render" r s <:> r
 
-foreign import autoDetectRendererImpl
-  "function autoDetectRendererImpl(x, y){\
-  \  return function(){\
-  \    return PIXI.autoDetectRenderer(x, y);\
-  \  };\
-  \}" :: forall e. Fn2 Number Number (Eff e Renderer)
+foreign import autoDetectRendererImpl :: forall e. Fn2 Number Number (Eff e Renderer)
+
+autoDetectRenderer :: forall a. Number -> Number -> Eff a { view :: DOM }
 autoDetectRenderer = runFn2 autoDetectRendererImpl
 
-foreign import appendToBody 
-  "function appendToBody(x){\
-  \  return function(){\
-  \    document.body.appendChild(x);\
-  \  };\
-  \}" :: forall e. DOM -> Eff (domMutation :: DOMMutation | e) Unit
+foreign import appendToBody :: forall e. DOM -> Eff (domMutation :: DOMMutation | e) Unit

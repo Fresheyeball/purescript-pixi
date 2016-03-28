@@ -1,14 +1,10 @@
 module Pixi.DisplayObject where
 
-import Data.Function
-import Data.Foreign.OOFFI
-import Control.Monad.Eff
-import Pixi.Rectangle
-import Pixi.Internal
-import Pixi.Point
-
-import Debug.Trace
-import Debug.Foreign
+import Data.Foreign.OOFFI (method0, method1Eff, method0Eff)
+import Control.Monad.Eff (Eff)
+import Pixi.Rectangle (Rectangle)
+import Pixi.Internal ((<:>))
+import Pixi.Point (Point)
 
 foreign import data InteractionData :: *
 foreign import data Mouse :: !
@@ -17,16 +13,17 @@ foreign import data Measure :: !
 foreign import data StageReference :: !
 foreign import data Position :: !
 
-class DisplayObject a 
+class DisplayObject a
 
 setStageReference :: forall a e. (DisplayObject a) => a -> Eff (displayObjectMutate :: StageReference | e) a
 setStageReference a = method0Eff "setStageReference" a <:> a
 
 type InteractionListener eff = forall a b e. (DisplayObject a) => a
-  -> (InteractionData -> Eff e b) 
+  -> (InteractionData -> Eff e b)
   -> Eff (interaction :: eff | e) a
 
-interactionListener name a f = method1Eff name a f <:> a 
+interactionListener :: forall a b c. String -> b -> c -> Eff a b
+interactionListener name a f = method1Eff name a f <:> a
 
 click           :: InteractionListener Mouse
 click            = interactionListener "click"
@@ -59,18 +56,8 @@ getBounds = method0 "getBounds"
 getLocalBounds :: Instrument
 getLocalBounds = method0 "getLocalBounds"
 
-foreign import setPositionImpl 
-  "function setPositionImpl(_){\
-  \  return function(a){\
-  \    return function(p){\
-  \      return function(){\
-  \        a.position = p;\
-  \        return a;\
-  \      };\
-  \    };\
-  \  };\
-  \}" :: forall a e. (DisplayObject a) => a -> Point -> (Eff e a)
+foreign import setPositionImpl :: forall a e. (DisplayObject a) => a -> Point -> (Eff e a)
 
 setPosition :: forall a e. (DisplayObject a) => Point
-  -> a -> Eff (trace :: Trace, position :: Position | e) a
+  -> a -> Eff (position :: Position | e) a
 setPosition p a = setPositionImpl a p
